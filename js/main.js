@@ -1,47 +1,74 @@
 var config = {
-  apiKey: "AIzaSyAkczjbo4Rw9e-suQtb-4I66ly75m57ld8",
-  authDomain: "fire-chat-a7472.firebaseapp.com",
-  databaseURL: "https://fire-chat-a7472.firebaseio.com",
-  storageBucket: "fire-chat-a7472.appspot.com",
-  messagingSenderId: "543361364856"
+    apiKey: "AIzaSyDoj0B4C1Fqq2Yd0qXqt2Qd4YKPFsqGBQA",
+    authDomain: "firechat-4eb5c.firebaseapp.com",
+    databaseURL: "https://firechat-4eb5c.firebaseio.com",
+    projectId: "firechat-4eb5c",
+    storageBucket: "firechat-4eb5c.appspot.com",
+    messagingSenderId: "695795447666"
 };
 firebase.initializeApp(config);
 
 var db = firebase.database();
 var messagesRef = db.ref('messages/');
 
-var provider = new firebase.auth.FacebookAuthProvider();
-firebase.auth().signInWithPopup(provider).then(function(result) {
-  var token = result.credential.accessToken;
-  var user = result.user;
-  $("#login-screen").fadeOut(function(){
-    $("#chat-screen").fadeIn();
-  });
-
-  messagesRef.on('value', function(snapshot){
-    //console.log(snapshot.val());
-    $("#messages").html("");
-    var values = snapshot.val();
-    for (var msgId in values){
-      var msg = values[msgId];
-      $("#messages").append(`
-        <li><strong>${msg.user}</strong>: ${msg.message}</li>
-        `);
-    }
-  });
-  document.addEventListener("keydown", function(e){
-    if (e.keyCode === 13) sendMessage(user.displayName);
-  });
-
-}).catch(function(error) {
-  var errorCode = error.code;
-  var errorMessage = error.message;
-  console.log(errorCode + " - " + errorMessage);
-});
-
-function sendMessage(username){
-  messagesRef.push({
-    user: username,
-    message: $("#message-input").val()
-  });
+function sendMessage(user) {
+    messagesRef.push({
+        user: user.displayName,
+        message: $("#message-input").val(),
+        photo: user.photoURL
+    });
+    $("#message-input").val("");
+    window.scrollTo(0,document.body.scrollHeight);
 }
+
+function loadMessages() {
+    messagesRef.limitToLast(100).on('value', function(snapshot) {
+        //console.log(snapshot.val());
+        $("#messages").html("");
+        var values = snapshot.val();
+        for (var msgId in values) {
+            var msg = values[msgId];
+            $("#messages").append(`
+                <div class="message-container">
+                    <img class="user-photo" src=${msg.photo} alt=${msg.user} />
+                    <div class="text">
+                        <p class="user-name">${msg.user}</p>
+                        <p class="message">${msg.message}</p>
+                    </div>
+                </div>
+            `);
+        }
+    });
+}
+
+
+// DEVELOPMENT CODE; delete the following code for production
+loadMessages()
+// end development code
+
+
+function login() {
+    var provider = new firebase.auth.FacebookAuthProvider();
+    firebase.auth().signInWithPopup(provider).then(function(result) {
+        var token = result.credential.accessToken;
+        var user = result.user;
+
+       $('#login-screen').fadeOut(function() {
+            $("#chat-screen").fadeIn();
+        });
+
+       loadMessages()
+
+       document.addEventListener("keydown", function(e) {
+            if (e.keyCode === 13 )
+                sendMessage(user);
+            }
+        );
+    }).catch(function(error) {
+        var errorCode = error.code;
+        var errorMessage = error.message;
+        console.log(errorCode + " - " + errorMessage);
+    });
+}
+
+$('#login-btn').click(login)
