@@ -1,24 +1,61 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>Firebase Chat</title>
-  <link rel="stylesheet" href="css/style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Firebase Chat</title>
+    <link rel="stylesheet" href="css/style.css">
 </head>
+
 <body>
-  <div id="login-screen">
-    <button id='login-btn' style="font-family: arial">Login</button>
-  </div>
-  <div id="chat-screen">
-    <div id="messages"></div>
-  </div>
-  <div id="input-container">
-    <input type="text" id="message-input">
-  </div>
-  <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/3.6.5/firebase.js"></script>
-  <script src="js/main.js"></script>
+
+    <div id="login-screen">
+
+        <div class="top">
+            <h1>Firechat</h1>
+        </div>
+
+        <div class="mid">
+            <div class="left"></div>
+            <div class="input">
+                <div class="white">
+                    <p>USERNAME</p>
+                    <input type="text" placeholder="you@yours.com" class="username">
+                    <p>PASSWORD</p>
+                    <input type="password" placeholder="Password" class="password">
+                    <button id='login-btn'>Get Started</button>
+                </div>
+            </div>
+            <div class="right"></div>
+        </div>
+        <div class="bottom">
+            <div class="account"></div>
+            <div class="help"></div>
+        </div>
+    </div>
+
+
+    </div>
+
+    <!-- <div class="main"> -->
+    <div id="chat-screen">
+        <div class="header">
+            <h1>Firechat</h1>
+        </div>
+        <div id="messages">
+            <div id="message">
+            </div>
+        </div>
+        <div id="input-container">
+            <input type="text" id="message-input">
+        </div>
+    </div>
+    <!-- </div> -->
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/3.6.5/firebase.js"></script>
+    <script src="js/main.js"></script>
 </body>
+
 </html>
